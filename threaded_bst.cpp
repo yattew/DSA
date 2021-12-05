@@ -12,8 +12,8 @@ struct Node
         key = d;
         left = NULL;
         right = NULL;
-        l_thread = false;
-        r_thread = false;
+        l_thread = true;
+        r_thread = true;
     }
 };
 struct TBST
@@ -48,18 +48,13 @@ struct TBST
             }
         }
         Node *n = new Node(key);
-        n->l_thread = true;
-        n->r_thread = true;
+
         if (key < parent->key)
         {
             n->left = parent->left;
             n->right = parent;
             parent->left = n;
             parent->l_thread = false;
-            if (n->left)
-                n->l_thread = true;
-            if (n->right)
-                n->r_thread = true;
         }
         else
         {
@@ -67,10 +62,6 @@ struct TBST
             n->left = parent;
             parent->right = n;
             parent->r_thread = false;
-            if (n->left)
-                n->l_thread = true;
-            if (n->right)
-                n->r_thread = true;
         }
         return;
     }
