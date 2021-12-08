@@ -21,13 +21,13 @@ int height_it(Node *node)
     {
         height++;
         int ct = q.size();
-        while(ct--)
+        while (ct--)
         {
-            Node*temp = q.front();
+            Node *temp = q.front();
             q.pop();
-            if(temp->left)
+            if (temp->left)
                 q.push(temp->left);
-            if(temp->right)
+            if (temp->right)
                 q.push(temp->right);
         }
     }
@@ -59,6 +59,85 @@ Node *insert(Node *node, int key)
     }
     return node;
 }
+Node *getMinimumKey(Node *curr)
+{
+    while (curr->left != nullptr)
+    {
+        curr = curr->left;
+    }
+    return curr;
+}
+void searchKey(Node *&curr, int key, Node *&parent)
+{
+    while (curr != nullptr && curr->data != key)
+    {
+        parent = curr;
+        if (key < curr->data)
+        {
+            curr = curr->left;
+        }
+        else
+        {
+            curr = curr->right;
+        }
+    }
+}
+void deleteNode(Node *&root, int key)
+{
+    Node *parent = nullptr;
+    Node *curr = root;
+    searchKey(curr, key, parent);
+    if (curr == nullptr)
+    {
+        return;
+    }
+    if (curr->left == nullptr && curr->right == nullptr)
+    {
+        if (curr != root)
+        {
+            if (parent->left == curr)
+            {
+                parent->left = nullptr;
+            }
+            else
+            {
+                parent->right = nullptr;
+            }
+        }
+        else
+        {
+            root = nullptr;
+        }
+        free(curr);
+    }
+    else if (curr->left && curr->right)
+    {
+        Node *successor = getMinimumKey(curr->right);
+        int val = successor->data;
+        deleteNode(root, successor->data);
+        curr->data = val;
+    }
+    else
+    {
+        Node *child = (curr->left) ? curr->left : curr->right;
+        if (curr != root)
+        {
+            if (curr == parent->left)
+            {
+                parent->left = child;
+            }
+            else
+            {
+                parent->right = child;
+            }
+        }
+        else
+        {
+            root = child;
+        }
+        free(curr);
+    }
+}
 void inorder(Node *root)
 {
     if (root)
@@ -86,6 +165,64 @@ void preorder(Node *root)
         preorder(root->right);
     }
 }
+void deleteleaf(Node*tree){
+    queue<Node*>q;
+    q.push(tree);
+    while(!q.empty())
+    {
+        Node*temp = q.front();
+        q.pop();
+        if(!temp->left->left)
+        {
+            temp->left = NULL;
+        }
+        if(!temp->right->left)
+        {
+            temp->right = NULL;
+        }
+        if(temp->left)
+        {
+            q.push(temp->left);
+        }
+        if(temp->right)
+        {
+            q.push(temp->right);
+        }
+    }
+}
+void MorrisTraversal(struct Node* root)
+{
+    struct Node *current, *pre;
+  
+    if (root == NULL)
+        return;
+  
+    current = root;
+    while (current != NULL) {
+  
+        if (current->left == NULL) {
+            printf("%d ", current->data);
+            current = current->right;
+        }
+        else {
+            pre = current->left;
+            while (pre->right != NULL
+                   && pre->right != current)
+                pre = pre->right;
+
+            if (pre->right == NULL) {
+                pre->right = current;
+                current = current->left;
+            }
+  
+            else {
+                pre->right = NULL;
+                printf("%d ", current->data);
+                current = current->right;
+            } 
+        } 
+    }
+}
 int main()
 {
     Node *tree = NULL;
@@ -94,5 +231,8 @@ int main()
     {
         tree = insert(tree, arr[i]);
     }
+    postorder(tree);
+    deleteleaf(tree);
+    cout<<endl;
     postorder(tree);
 }
