@@ -40,6 +40,27 @@ class LinkedList:
         itr_temp = itr.next
         itr.next = Node(data)
         itr.next.next = itr_temp
+    def pop(self,idx=None):
+        if idx == None:
+            if not self.head:
+                raise IndexError("the list is empty")
+            else:
+                idx = len(self)-1
+        if idx == 0:
+            itr_temp = self.head
+            self.head = itr_temp.next
+            return itr_temp.data
+        itr = self.head
+        try:
+            while idx>1:
+                idx-=1
+                itr = itr.next
+        except:
+            raise IndexError("index out of range")
+        itr_temp = itr.next
+        itr.next = itr_temp.next
+        itr_temp.next = None
+        return itr_temp.data
     def __repr__(self):
         res = ""
         itr = self.head
@@ -58,14 +79,9 @@ class LinkedList:
 
 
 l = LinkedList()
-l.insert(0, 1)
-l.insert(1,2)
-l.insert(1,3)
-l.insert(3,4)
-l.insert(2,100)
+
+for i in range(1,11):
+    l.append(i)
+print (l)
+l.pop(0)
 print(l)
-print(len(l))
-# for i in range(1,11):
-#     l.append(i)
-# print (l)
-# l.insert(-1,1)
