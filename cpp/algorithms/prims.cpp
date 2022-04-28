@@ -26,7 +26,6 @@ int *prims(int edgeMatrix[V][V], int n)
         int min[2] = {-1, INT_MAX};
         for (int i = 0; i < edgesSelected; i++)
         {
-            // int m = 0;
             for (int j = 0; j < n; j++)
             {
                 if (
