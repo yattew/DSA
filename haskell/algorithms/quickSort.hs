@@ -1,3 +1,6 @@
 quickSort :: Ord a => [a] -> [a]
 quickSort [] = []
-quickSort (x : xs) = quickSort (filter (< x) xs) ++ [x] ++ quickSort (filter (>= x) xs)
+quickSort (x : xs) = l ++ [x] ++ r
+  where
+    l = quickSort $ filter (< x) xs
+    r = quickSort $ filter (>= x) xs
